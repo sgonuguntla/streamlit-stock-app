@@ -24,6 +24,12 @@ if st.button("Show Chart"):
             data['MA50'] = data['Close'].rolling(window=50).mean()
 
             # Debug print
-            st.write("Processed Data:", data[['Close', 'MA20', 'MA50']].tail())
+st.write("Processed Data:", data[['Close', 'MA20', 'MA50']].dropna().tail())
 
-            st.line_chart(data[['Close', 'MA20', 'MA50']])
+# Only plot if all required columns exist and have data
+if all(col in data.columns for col in ['Close', 'MA20', 'MA50']) and not data[['Close', 'MA20', 'MA50']].dropna().empty:
+    st.line_chart(data[['Close', 'MA20', 'MA50']].dropna())
+else:
+    st.warning("Not enough data to plot the chart. Try a larger date range.")
+    
+                     
